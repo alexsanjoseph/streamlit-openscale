@@ -4,31 +4,32 @@ import os
 import dropbox
 import csv
 import pandas as pd
-from io import StringIO
 from dropbox_aux import *
 from datetime import datetime
 from plotnine import *
+from css import current_css
+from plot import plot_and_save
+
+st.markdown(current_css, unsafe_allow_html=True)
 st.markdown("# Openscale + Streamlit = Awesome")
 
 DROPBOX_KEY = os.environ['DROPBOX_OPENSCALE_ACCESS_KEY']
-USERNAME = "Alex"
 FOLDER_NAME = "/openscale"
 TEMP_FILE_NAME = "image.png"
+
 dbx = dropbox.Dropbox(DROPBOX_KEY)
 
-latest_file = get_latest_file_from_dropbox(dbx, FOLDER_NAME, USERNAME)
+username = st.sidebar.selectbox("Select User", ["Alex", "Malavika"])
+date_start = st.sidebar.date_input("Start Date", pd.to_datetime("2018-08-01"))
+date_end = st.sidebar.date_input("End Date", datetime.today())
 
-meta, res = dbx.files_download(FOLDER_NAME + "/" +  latest_file)
-file_output = res.content.decode("utf-8")
-scale_data_df = pd.read_csv(StringIO(file_output))
+latest_file = get_latest_file_name_from_dropbox(dbx, FOLDER_NAME, username)
+scale_data_df = download_file_data_from_dropbox(dbx, FOLDER_NAME, latest_file)
 
-scale_data_df_cleaned = scale_data_df\
+scale_data_df_cleaned = scale_data_df \
     .loc[:,["dateTime", "weight"]] \
-    .assign(timestamp = pd.to_datetime(scale_data_df['dateTime']))
+    .assign(timestamp = pd.to_datetime(scale_data_df['dateTime'])) \
+    .query("timestamp >= @date_start & timestamp <= @date_end") 
 
-plot_output = (ggplot(scale_data_df_cleaned, aes(x = 'timestamp', y = 'weight')) + 
-#   facet_wrap('~', ncol = 1, scales = 'free') +
-  geom_point(size = 0.5))
-
-plot_output.save(TEMP_FILE_NAME, dpi = 200)
+plot_and_save(scale_data_df_cleaned, TEMP_FILE_NAME)
 st.image(TEMP_FILE_NAME)
