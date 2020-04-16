@@ -22,6 +22,7 @@ dbx = dropbox.Dropbox(DROPBOX_KEY)
 username = st.sidebar.selectbox("Select User", ["Alex", "Malavika"])
 date_start = st.sidebar.date_input("Start Date", pd.to_datetime("2018-08-01"))
 date_end = st.sidebar.date_input("End Date", datetime.today())
+smooth_factor = st.sidebar.slider("Select smoothening factor", 0.01, 0.5, 0.12)
 
 latest_file = get_latest_file_name_from_dropbox(dbx, FOLDER_NAME, username)
 scale_data_df = download_file_data_from_dropbox(dbx, FOLDER_NAME, latest_file)
@@ -31,5 +32,5 @@ scale_data_df_cleaned = scale_data_df \
     .assign(timestamp = pd.to_datetime(scale_data_df['dateTime'])) \
     .query("timestamp >= @date_start & timestamp <= @date_end") 
 
-plot_and_save(scale_data_df_cleaned, TEMP_FILE_NAME)
+plot_and_save(scale_data_df_cleaned, smooth_factor, TEMP_FILE_NAME)
 st.image(TEMP_FILE_NAME)
