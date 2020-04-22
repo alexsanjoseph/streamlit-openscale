@@ -4,11 +4,11 @@ import os
 import dropbox
 import csv
 import pandas as pd
-from dropbox_aux import *
+from src.dropbox_aux import *
 from datetime import datetime
 from plotnine import *
-from css import current_css
-from plot import plot_and_save
+from src.css import current_css
+from src.plot import plot_and_save
 
 st.markdown(current_css, unsafe_allow_html=True)
 st.markdown("# Openscale + Streamlit = Awesome")
@@ -28,8 +28,8 @@ latest_file = get_latest_file_name_from_dropbox(dbx, FOLDER_NAME, username)
 scale_data_df = download_file_data_from_dropbox(dbx, FOLDER_NAME, latest_file)
 
 scale_data_df_cleaned = scale_data_df \
-    .loc[:,["dateTime", "weight"]] \
-    .assign(timestamp = pd.to_datetime(scale_data_df['dateTime'])) \
+    .loc[:, ["dateTime", "weight"]] \
+    .assign(timestamp=pd.to_datetime(scale_data_df['dateTime'])) \
     .query("timestamp >= @date_start & timestamp <= @date_end") 
 
 plot_and_save(scale_data_df_cleaned, smooth_factor, TEMP_FILE_NAME)
