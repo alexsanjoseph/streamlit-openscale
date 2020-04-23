@@ -1,14 +1,13 @@
-
-import streamlit as st
 import os
-import dropbox
-import csv
-import pandas as pd
-from src.dropbox_aux import *
 from datetime import datetime
-from plotnine import *
-from src.css import current_css
-from src.plot import plot_and_save
+
+import dropbox
+import pandas as pd
+import streamlit as st
+
+from css import current_css
+from dropbox_aux import get_latest_file_name_from_dropbox, download_file_data_from_dropbox
+from plot import plot_and_save
 
 st.markdown(current_css, unsafe_allow_html=True)
 st.markdown("# Openscale + Streamlit = Awesome")
