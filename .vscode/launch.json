@@ -8,7 +8,7 @@
             "name": "Python: Streamlit",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/src/ui.py",
+            "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/../config/personal_config.env"
         }

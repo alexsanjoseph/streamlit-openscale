@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import dropbox
 import pandas as pd
@@ -21,7 +21,7 @@ def run_streamlit_ui():
 
     username = st.sidebar.selectbox("Select User", ["Alex", "Malavika"])
     date_start = st.sidebar.date_input("Start Date", pd.to_datetime("2018-08-01"))
-    date_end = st.sidebar.date_input("End Date", datetime.today())
+    date_end = st.sidebar.date_input("End Date", datetime.today()) + timedelta(days=1)
     smooth_factor = st.sidebar.slider("Select smoothening factor", 0.01, 0.5, 0.12)
 
     latest_file = get_latest_file_name_from_dropbox(dbx, FOLDER_NAME, username)
