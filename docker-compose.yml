@@ -1,0 +1,11 @@
+version: '3.3'
+
+services:
+  streamlit:
+    env_file: .env
+    image: alexsanjoseph/streamlit-openscale
+    restart: always
+    entrypoint: streamlit
+    command: "run main.py"
+    ports:
+    - "8501:8501"    
