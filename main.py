@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from src.ui import run_streamlit_ui
 
 
