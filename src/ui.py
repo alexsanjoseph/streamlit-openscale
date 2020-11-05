@@ -17,16 +17,19 @@ def run_streamlit_ui():
     FOLDER_NAME = "/openscale"
     TEMP_FILE_NAME = "image.png"
 
+    users = ["Alex", "Malavika"]
+    default_start_date = pd.to_datetime("2018-08-01")
+
     dbx = dropbox.Dropbox(DROPBOX_KEY)
 
-    username = st.sidebar.selectbox("Select User", ["Alex", "Malavika"])
-    date_start = st.sidebar.date_input("Start Date", pd.to_datetime("2018-08-01"))
+    username = st.sidebar.selectbox("Select User", users)
+    date_start = st.sidebar.date_input("Start Date", default_start_date)
     date_end = st.sidebar.date_input("End Date", datetime.today()) + timedelta(days=1)
     smooth_factor = st.sidebar.slider("Select smoothening factor", 0.01, 0.5, 0.12)
 
     latest_file = get_latest_file_name_from_dropbox(dbx, FOLDER_NAME, username)
     scale_data_df = download_file_data_from_dropbox(dbx, FOLDER_NAME, latest_file)
-
+    print(scale_data_df.loc[:, ["dateTime", "weight"]])
     scale_data_df_cleaned = scale_data_df \
         .loc[:, ["dateTime", "weight"]] \
         .assign(timestamp=pd.to_datetime(scale_data_df['dateTime'])) \
