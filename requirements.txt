@@ -1,4 +1,4 @@
-dropbox==9.5.0
-pandas==1.0.3
-plotnine==0.6.0
-streamlit==0.57.3
+dropbox==11.32.0
+pandas==1.4.3
+plotnine==0.8.0
+streamlit==1.10.0
